@@ -1,5 +1,8 @@
 # AGENTS.md
 
+#全局规则
+临时生成的测试文件和脚本，任务完成后要删除，启动的subAgent在任务完成时也要及时关闭。
+
 ## 1. 新会话与断点续作
 
 开始处理项目任务时，按需读取：
@@ -83,3 +86,17 @@ API变化必须同步现有契约、共享类型、请求响应、错误码、�
 Git提交优先遵循当前项目规范，其次遵循可用的上级或全局 `AGENTS.md`；均未规定时使用Conventional Commits（`type(scope): 简洁中文subject`）。除非用户明确要求，否则不执行Commit、Push、Clean、Amend、Rebase、Reset或强制推送。
 
 删除、覆盖、数据库清空和不可逆迁移前，先列出对象、影响、理由和恢复方式，获得确认后执行。
+
+
+
+# Git 提交规范
+
+当用户要求提交代码、执行 commit 或生成中文提交信息时：
+
+- 只分析 `git diff --cached`，不包含 unstaged/untracked 文件；没有 staged changes 时提示用户先 `git add`，不要自动暂存。
+- 使用 Conventional Commits：`feat|fix|docs|style|refactor|perf|test|chore|ci|build|revert`。
+- 新功能用 `feat`，修复用 `fix`，文档用 `docs`，测试用 `test`，重构用 `refactor`，性能优化用 `perf`，依赖/构建用 `build`，CI 用 `ci`，其他维护用 `chore`。
+- 格式为 `type(scope): subject`；scope 可选并从实际改动推断，subject 使用简洁中文动作描述，不超过 100 字符，不加句号。
+- 破坏性修改使用 `type(scope)!: subject`；彼此无关的改动先提示拆分提交。
+- 用户明确要求提交时，自动生成 message 并执行 `git commit`，不要求用户手写。
+- 不自动 push、暂存、amend、rebase、reset 或使用 `--no-verify`，除非用户明确要求；提交后检查状态并报告 commit hash。
